@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>MarceloCastelo.IO.OutputEnvelop.FluentValidation</PackageId>
+		<Copyright>marcelocastelo.io</Copyright>
+		<Authors>marcelocastelo.io</Authors>
+		<Company>marcelocastelo.io</Company>
+		<PackageProjectUrl>https://github.com/marcelocasteloio/MCIO.OutputEnvelop.FluentValidation</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/marcelocasteloio/MCIO.OutputEnvelop.FluentValidation</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\images\icon.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="FluentValidation" Version="11.9.0" />
+		<PackageReference Include="MarceloCastelo.IO.OutputEnvelop" Version="2.0.0" />
+	</ItemGroup>
+
+</Project>
