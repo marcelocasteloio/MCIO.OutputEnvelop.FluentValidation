@@ -1,9 +1,10 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
+using FluentValidation;
 using MCIO.OutputEnvelop.Enums;
 using MCIO.OutputEnvelop.Models;
 
-namespace MCIO.OutputEnvelop.FluentValidation
+// The namespace MCIO.OutputEnvelop has choiced to be easy to integrate OutputEnvelop object
+namespace MCIO.OutputEnvelop
 {
     public static class ExtensionMethods
     {
