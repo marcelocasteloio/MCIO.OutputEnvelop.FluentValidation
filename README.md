@@ -30,23 +30,7 @@ Uma extensão do pacote [MarceloCastelo.IO.OutputEnvelop](https://www.nuget.org/
 
 ## :page_facing_up: Introdução
 
-Esse projeto nasceu de uma necessidade pessoal. Quando estamos desenvolvendo um sistema temos que tomar diversas decisões com relação ao design do código e manter o equilíbrio entre legibilidade, manutenabilidade e performance é sempre um desafio pois, no fim das contas, nós escrevemos código para outra pessoa entender e não para o computador.
-
-Como assim? Existem diferentes tipos de sistemas, mas o mais comum são os que chamamos de sistemas *LOB (line of business)* que são aplicações que tem como o objetivo automatizar processos de negócios em corporações como processos de venda, compras, pedidos, chamados, suportes, processos financeiros etc. Esses sistemas possuem algumas características que costumam se repetir:
-- Autenticar o usuário que está tentando realizar a operação.
-- Autorizar o usuário autenticado para a operação que está querendo realizar.
-- Receber inputs dos usuários.
-- Validar os inputs dos usuários.
-- Validar os estados dos objetos de negócio.
-- Realizar algum processo de negócio que modifique o estado dos objetos de negócio.
-- Persistir essas informações.
-- Retornar o resultado da solicitação para o usuário.
-- Exibir diversos relatórios a partir das informações armazenadas.
-
-Além disso, nesse tipo de sistema, os retornos dos métodos vão além de um único objeto e é comum querermos saber mais informações do que somente se deu erro ou não, por exemplo:
-- Queremos saber as notificações que ocorreram durante a execução dos métodos.
-- Essas notificações são mais do que simples mensagens de erro, podem ser mensagens de warning (por exemplo: quando um pedido de compra ultrapassa determinado valor), podem ser mensagens informativas (por exemplo: informar a integração com os parceiros foi realizada com sucesso durante o processamento da requisição) etc.
-- O processamento nem sempre se resume a sucesso ou falha. Em processamento em lote por exemplo, o resultado da operação pode ser parcial onde parte dos itens do lote são processados e outra parte não.
+O pacote [FluentValidation](https://www.nuget.org/packages/FluentValidation) é amplamente utilizado em projetos .NET devido à sua robustez e flexibilidade, especialmente em validações de domínio. O pacote [MarceloCastelo.IO.OutputEnvelop](https://www.nuget.org/packages/MarceloCastelo.IO.OutputEnvelop/) pode ser utilizado no lugar do FluentValidation. No entanto, é importante que eles possam funcionar lado a lado para proporcionar maior flexibilidade no projeto. Este pacote realiza a integração necessária para que possam coexistir harmoniosamente.
 
 ## :book: Conteúdo
 - [MCIO.OutputEnvelop.FluentValidation](#mciooutputenvelopfluentvalidation)
@@ -54,166 +38,151 @@ Além disso, nesse tipo de sistema, os retornos dos métodos vão além de um ú
   - [:label: Labels](#label-labels)
   - [:page\_facing\_up: Introdução](#page_facing_up-introdução)
   - [:book: Conteúdo](#book-conteúdo)
-  - [:computer: Tecnologias](#computer-tecnologias)
-  - [:star: Funcionalidades-chave](#star-funcionalidades-chave)
-  - [:star: Roadmap](#star-roadmap)
+  - [:package: Dependências](#package-dependências)
   - [:books: Utilização básica](#books-utilização-básica)
-  - [:books: Exemplos](#books-exemplos)
+  - [:books: Exemplo completo](#books-exemplo-completo)
   - [:people\_holding\_hands: Contribuindo](#people_holding_hands-contribuindo)
   - [:people\_holding\_hands: Autores](#people_holding_hands-autores)
 
-## :computer: Tecnologias
+## :package: Dependências
 
-[voltar ao topo](#book-conteúdo)
-
-Esse projeto utiliza as seguintes tecnologias:
-- `C#` como linguagem de programação.
-- `.NET Standard 2.0` para o pacote nuget.
-- `.NET 8` para os projetos de teste de unidade, benchmark e exemplos.
-- `xUnit` como framework de testes de unidade.
-- `FluentAssertions` para escrita dos Asserts dos testes de unidade de forma fluída,
-- `SonarQube` para ferramenta de análise estática de código (SAST - *Static Application Security Testing*),
-- `Stryker.NET` como framework para testes de mutação.
-- `BenchmarkDotNet` como framework para realização dos benchmarks.
-- `Github Actions` para as pipelines.
-- `Github CodeQL` para análise de vulnerabilidades de segurança.
-- `Nuget.org` como repositório de pacotes.
-
-## :star: Funcionalidades-chave
-
-[voltar ao topo](#book-conteúdo)
-
-Esse projeto tem como objetivo fornecer um `envelope de resposta` que segue os seguintes princípios de design: 
-
-- :white_check_mark: Seja otimizado para alocação na stack ao invés da heap para `evitar pressão no garbage collector`.
-- :white_check_mark: Tenha a característica da `imutabilidade` para ter a garantia que uma vez criado, não será modificado e que, alterações implicarão na criação de um novo objeto.
-- :white_check_mark: Ter uma `API de alto nível` para que seja flexível para ser utilizado em diversos cenários com pouca necessidade de customização do código.
-- :white_check_mark: Seja otimizado para `não realizar box e unboxing` e `evitar criação de closures` nos encapsulamentos para não gerar alocações na heap.
-- :white_check_mark: Evitar o `uso desnecessário` e `lançamento de exceções` ocasionando problemas de desempenho.
-- :white_check_mark: Ser `Thread-safe`.
-
-## :star: Roadmap
-
-[voltar ao topo](#book-conteúdo)
-
-- :green_circle: Versão 1.0.0
-  - :green_circle: Suporte para mensagens de saída dos tipos `information`, `success`, `warning` e `error`.
-  - :green_circle: Notificações imutáveis.
-  - :green_circle: Envelope de resposta com encapsulamento de mensagens de saída, exceções e suporte a processamento parcial.
-  - :green_circle: Envelope de resposta encapsulando a execução para captura automática de exceções.
-  - :green_circle: Envelopes de resposta imutáveis.
-- :green_circle: Versão 1.1.0
-  - :green_circle: Suporte para tipagem da propriedade `Code` do objeto [OutputMessage](src/OutputEnvelop/Models/OutputMessage.cs) a partir de generics.
-  - :green_circle: Remoção da obrigatoriedade do campo `Code` no objeto [OutputMessage](src/OutputEnvelop/Models/OutputMessage.cs).
-- :green_circle: Versão 2.0.0
-  - :green_circle: Correção do termo `ProcessResult` para `OutputEnvelop`.
-- :green_circle: Criação do pacote `MarceloCastelo.IO.OutputEnvelop.FluentValidation` para integração com o pacote [FluentValidation](https://www.nuget.org/packages/FluentValidation).
+- [.NET Standard 2.0](https://learn.microsoft.com/pt-br/dotnet/standard/net-standard?tabs=net-standard-2-0).
+- Pacote [FluentValidation](https://www.nuget.org/packages/FluentValidation).
 
 ## :books: Utilização básica
 
-O trecho do código abaixo foi extraído da classe [Customer](samples/SampleApi/Domain/Entities/Customer.cs)] do projeto de exemplo na pasta `samples/SampleApi`.
-
-O trecho de código abaixo possui o envelope de resposta no retorno dos métodos e como unir envelopes de resposta em um único envelope de resposta que agrega todos os demais.
-
+- Sem objeto de retorno
 ```csharp
+using MCIO.OutputEnvelop;
 
-// Public Methods
-public static OutputEnvelop<Customer?> RegisterNew(string name, string email, DateOnly? birthDate)
-{
-    // Process
-    var customer = new Customer();
-
-    var processOutputEnvelop = OutputEnvelop.Create(
-        customer.GenerateNewId(),
-        customer.SetName(name),
-        customer.SetEmail(email),
-        customer.SetBirthDate(birthDate)
-    );
-
-    // Return
-    return OutputEnvelop<Customer?>.Create(
-        output: processOutputEnvelop.IsSuccess ? customer : null,
-        processOutputEnvelop
-    );
-}
-
-// Private Methods
-private OutputEnvelop SetId(Guid id)
-{
-    // Validate
-    if (id == Guid.Empty)
-        return OutputEnvelop.CreateError(IdShouldRequiredMessageCode, IdShouldRequiredMessageDescription);
-
-    // Process
-    Id = id;
-
-    // Return
-    return OutputEnvelop.CreateSuccess();
-}
-private OutputEnvelop GenerateNewId()
-{
-    return SetId(Guid.NewGuid());
-}
-
-private OutputEnvelop SetName(string name)
-{
-    // Validate
-    if (string.IsNullOrWhiteSpace(name))
-        return OutputEnvelop.CreateError(NameShouldRequiredMessageCode, NameShouldRequiredMessageDescription);
-    else if(name.Length > NameMaxLength)
-        return OutputEnvelop.CreateError(NameShouldLessThanMaxLengthMessageCode, NameShouldLessThanMaxLengthMessageDescription);
-
-    // Process
-    Name = name;
-
-    // Return
-    return OutputEnvelop.CreateSuccess();
-}
-
-private OutputEnvelop SetEmail(string email)
-{
-    // Validate
-    if (string.IsNullOrWhiteSpace(email))
-        return OutputEnvelop.CreateError(EmailShouldRequiredMessageCode, EmailShouldRequiredMessageDescription);
-    else if (email.Length > EmailMaxLength)
-        return OutputEnvelop.CreateError(EmailShouldLessThanMaxLengthMessageCode, EmailShouldLessThanMaxLengthMessageDescription);
-
-    // Process
-    Email = email;
-
-    // Return
-    return OutputEnvelop.CreateSuccess();
-}
-
-private OutputEnvelop SetBirthDate(DateOnly? birthDate)
-{
-    // Validate
-    if (birthDate is not null)
-    {
-        var age = DateTime.Now.Date.Year - birthDate.Value.Year;
-
-        if (DateTime.Now.Month < birthDate.Value.Month)
-            age--;
-        else if (DateTime.Now.Month == birthDate.Value.Month && DateTime.Now.Day < birthDate.Value.Day)
-            age--;
-
-        if (age > BirthDateMaxAge)
-            return OutputEnvelop.CreateError(BirthDateShouldLessThanMaxAgeMessageCode, BirthDateShouldLessThanMaxAgeMessageDescription);
-    }
-
-    // Process
-    BirthDate = birthDate;
-
-    // Return
-    return OutputEnvelop.CreateSuccess();
-}
+var validationResult = someValidator.Validate(input);
+var outputEnvelop = validationResult.ToOutputEnvelopInternal();
 ```
 
-## :books: Exemplos
+- Com objeto de retorno
+```csharp
+using MCIO.OutputEnvelop;
 
-[voltar ao topo](#book-conteúdo)
+var customer = new Customer();
+var validationResult = someValidator.Validate(input);
+var outputEnvelop = validationResult.ToOutputEnvelopInternal(customer);
+```
 
-Para que possa ver, na prática, a utilização do envelope de resposta nos diferentes cenários para o qual ele foi projetado, criei uma API de exemplo localizando dentro do diretório `samples/SampleApi`.
+## :books: Exemplo completo
+
+```csharp
+    public class Customer
+    {
+        // Fields
+        private static RegisterNewCustomerInputValidator _registerNewCustomerInputValidator = new();
+
+        // Properties
+        public int Id { get; }
+        public string Name { get; }
+        public DateOnly BirthDate { get; }
+
+        // Constructors
+        private Customer(int id, string name, DateOnly birthDate)
+        {
+            Id = id;
+            Name = name;
+            BirthDate = birthDate;
+        }
+
+        // Public Methods
+        // Validation result is a out variable for test reasons
+        public static OutputEnvelop<Customer> RegisterNew(RegisterNewCustomerInput input, out ValidationResult validationResult)
+        {
+            // Validation
+            validationResult = _registerNewCustomerInputValidator.Validate(input);
+            if (!validationResult.IsValid)
+                return validationResult.ToOutputEnvelop<Customer>(output: null!);
+
+            // Process and return
+            return validationResult.ToOutputEnvelop(
+                output: validationResult.IsValid ? new Customer(id: input.Id, name: input.Name, birthDate: input.BirthDate) : null!
+            );
+        }
+
+        // Inputs
+        public record RegisterNewCustomerInput(int Id, string Name, DateOnly BirthDate);
+
+        public class RegisterNewCustomerInputValidator
+            : AbstractValidator<RegisterNewCustomerInput>
+        {
+            // Constants
+            public const string CUSTOMER_ID_IS_REQUIRED_MESSAGE_CODE = "CUSTOMER_ID_IS_REQUIRED";
+            public const string CUSTOMER_ID_IS_REQUIRED_MESSAGE_DESCRIPTION = "Id is required";
+            public const Severity CUSTOMER_ID_IS_REQUIRED_MESSAGE_SEVERITY = Severity.Error;
+
+            public const string CUSTOMER_NAME_IS_REQUIRED_MESSAGE_CODE = "CUSTOMER_NAME_IS_REQUIRED";
+            public const string CUSTOMER_NAME_IS_REQUIRED_MESSAGE_DESCRIPTION = "Name is required";
+            public const Severity CUSTOMER_NAME_IS_REQUIRED_MESSAGE_SEVERITY = Severity.Error;
+
+            public const string CUSTOMER_NAME_SHOULD_HAVE_LAST_NAME_MESSAGE_CODE = "CUSTOMER_NAME_SHOULD_HAVE_LAST_NAME";
+            public const string CUSTOMER_NAME_SHOULD_HAVE_LAST_NAME_MESSAGE_DESCRIPTION = "Name should have last name";
+            public const Severity CUSTOMER_NAME_SHOULD_HAVE_LAST_NAME_MESSAGE_SEVERITY = Severity.Warning;
+            
+            public const string CUSTOMER_BIRTHDATE_IS_REQUIRED_MESSAGE_CODE = "CUSTOMER_BIRTHDATE_IS_REQUIRED";
+            public const string CUSTOMER_BIRTHDATE_IS_REQUIRED_MESSAGE_DESCRIPTION = "BirthDate is required";
+            public const Severity CUSTOMER_BIRTHDATE_IS_REQUIRED_MESSAGE_SEVERITY = Severity.Error;
+
+            public const string CUSTOMER_BIRTHDATE_SHOULD_HAVE_MAX_LENGTH_MESSAGE_CODE = "CUSTOMER_BIRTHDATE_SHOULD_HAVE_MAX_LENGTH";
+            public const string CUSTOMER_BIRTHDATE_SHOULD_HAVE_MAX_LENGTH_MESSAGE_DESCRIPTION = "BirthDate is required";
+            public const Severity CUSTOMER_BIRTHDATE_SHOULD_HAVE_MAX_LENGTH_MESSAGE_SEVERITY = Severity.Error;
+
+            public const string CUSTOMER_BIRTHDATE_DAY_MESSAGE_CODE = "CUSTOMER_BIRTHDATE_DAY";
+            public const string CUSTOMER_BIRTHDATE_DAY_MESSAGE_DESCRIPTION = "Today is the customer birthday";
+            public const Severity CUSTOMER_BIRTHDATE_DAY_MESSAGE_SEVERITY = Severity.Info;
+
+            // Public Methods
+            public RegisterNewCustomerInputValidator()
+            {
+                RuleFor(p => p.Id)
+                    .GreaterThan(0)
+                    .WithErrorCode(CUSTOMER_ID_IS_REQUIRED_MESSAGE_CODE)
+                    .WithMessage(CUSTOMER_ID_IS_REQUIRED_MESSAGE_DESCRIPTION)
+                    .WithSeverity(CUSTOMER_ID_IS_REQUIRED_MESSAGE_SEVERITY);
+
+                RuleFor(p => p.Name)
+                    .NotEmpty()
+                    .WithErrorCode(CUSTOMER_NAME_IS_REQUIRED_MESSAGE_CODE)
+                    .WithMessage(CUSTOMER_NAME_IS_REQUIRED_MESSAGE_DESCRIPTION)
+                    .WithSeverity(CUSTOMER_NAME_IS_REQUIRED_MESSAGE_SEVERITY);
+                
+                RuleFor(p => p.Name)
+                    .MaximumLength(150)
+                    .WithErrorCode("CUSTOMER_NAME_SHOULD_HAVE_MAX_LENGTH")
+                    .WithMessage("Name should less than or equais 150 characters")
+                    .WithSeverity(Severity.Error);
+
+                RuleFor(p => p.Name)
+                    .Must(name => name.Contains(" "))
+                    .WithErrorCode(CUSTOMER_NAME_SHOULD_HAVE_LAST_NAME_MESSAGE_CODE)
+                    .WithMessage(CUSTOMER_NAME_SHOULD_HAVE_LAST_NAME_MESSAGE_DESCRIPTION)
+                    .WithSeverity(CUSTOMER_NAME_SHOULD_HAVE_LAST_NAME_MESSAGE_SEVERITY);
+
+                RuleFor(p => p.BirthDate)
+                    .NotEmpty()
+                    .WithErrorCode(CUSTOMER_BIRTHDATE_IS_REQUIRED_MESSAGE_CODE)
+                    .WithMessage(CUSTOMER_BIRTHDATE_IS_REQUIRED_MESSAGE_DESCRIPTION)
+                    .WithSeverity(CUSTOMER_BIRTHDATE_IS_REQUIRED_MESSAGE_SEVERITY);
+
+                RuleFor(p => p.BirthDate)
+                    .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
+                    .WithErrorCode(CUSTOMER_BIRTHDATE_SHOULD_HAVE_MAX_LENGTH_MESSAGE_CODE)
+                    .WithMessage(CUSTOMER_BIRTHDATE_SHOULD_HAVE_MAX_LENGTH_MESSAGE_DESCRIPTION)
+                    .WithSeverity(CUSTOMER_BIRTHDATE_SHOULD_HAVE_MAX_LENGTH_MESSAGE_SEVERITY);
+
+                RuleFor(p => p.BirthDate)
+                    .Must(q => q != DateOnly.FromDateTime(DateTime.Now))
+                    .WithErrorCode(CUSTOMER_BIRTHDATE_DAY_MESSAGE_CODE)
+                    .WithMessage(CUSTOMER_BIRTHDATE_DAY_MESSAGE_DESCRIPTION)
+                    .WithSeverity(CUSTOMER_BIRTHDATE_DAY_MESSAGE_SEVERITY);
+            }
+        }
+    }
+```
 
 ## :people_holding_hands: Contribuindo
 
