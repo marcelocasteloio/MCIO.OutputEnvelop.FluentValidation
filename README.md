@@ -42,6 +42,7 @@ O pacote [FluentValidation](https://www.nuget.org/packages/FluentValidation) é 
   - [:books: Utilização básica](#books-utilização-básica)
   - [:books: Exemplo completo](#books-exemplo-completo)
   - [:rocket: Executando localmente](#rocket-executando-localmente)
+  - [:rocket: Benchmark](#rocket-benchmark)
   - [:people\_holding\_hands: Contribuindo](#people_holding_hands-contribuindo)
   - [:people\_holding\_hands: Autores](#people_holding_hands-autores)
 
@@ -187,6 +188,8 @@ public class Customer
 
 ## :rocket: Executando localmente
 
+[voltar ao topo](#book-conteúdo)
+
 Por se tratar de um pacote nuget, não existe uma execução. Porém, existe o script [build-local-script](build-local-script.ps1) que pode ser executado via PowerShell que realizará as seguintes ações:
 
 1. Instalará a CLI do ReportGenerator localmente para visualização do relatório de cobertura no formato opencover.
@@ -201,6 +204,39 @@ Por se tratar de um pacote nuget, não existe uma execução. Porém, existe o s
 A partir do `diretóio raiz` do repositório, no `PowerShell`, execute o comando `.\build-local-script.ps1`.
 
 Caso queira limpar todos os arquivos gerados, a partir do `diretóio raiz` do repositório, no `PowerShell`, execute o comando `.\clear-local-script.ps1`.
+
+## :rocket: Benchmark
+
+[voltar ao topo](#book-conteúdo)
+
+O benchmark abaixo (arquivo [ExtensionMethodsBenchmark.cs](benchs/Benchmarks/ExtensionMethodsBenchs/ExtensionMethodsBenchmark.cs)) compara a utilização do objeto ValidationResult como retorno do método e gerando um OutputEnvelop a partir do ValidationResult gerado.
+
+```pwsh
+// * Summary *
+
+BenchmarkDotNet v0.13.11, Windows 11 (10.0.22631.2861/23H2/2023Update/SunValley3)
+AMD Ryzen 5 5600X, 1 CPU, 12 logical and 6 physical cores
+.NET SDK 8.0.100
+  [Host]     : .NET 8.0.0 (8.0.23.53103), X64 RyuJIT AVX2
+  Job-BHOBUW : .NET 8.0.0 (8.0.23.53103), X64 RyuJIT AVX2
+
+LaunchCount=1  RunStrategy=Throughput
+```
+
+| Method                                | Mean     | Error     | StdDev    | Ratio | RatioSD | TotalCycles/Op | CacheMisses/Op | BranchInstructions/Op | TotalIssues/Op | BranchMispredictions/Op | Timer/Op | Gen0   | Allocated | Alloc Ratio |
+|-------------------------------------- |---------:|----------:|----------:|------:|--------:|---------------:|---------------:|----------------------:|---------------:|------------------------:|---------:|-------:|----------:|------------:|
+| 'ValidationResult From Valid Input'   | 2.126 us | 0.0149 us | 0.0140 us |  1.00 |    0.00 |          4,955 |             10 |                 1,754 |          7,701 |                       7 |       21 | 0.0381 |     664 B |        1.00 |
+| 'OutputEnvelop From Valid Input'      | 2.142 us | 0.0094 us | 0.0088 us |  1.01 |    0.01 |          4,969 |             11 |                 1,775 |          7,748 |                       7 |       22 | 0.0381 |     664 B |        1.00 |
+| 'ValidationResult From Invalid Input' | 3.951 us | 0.0223 us | 0.0198 us |  1.86 |    0.02 |          9,076 |             29 |                 3,289 |         14,827 |                      16 |       40 | 0.1297 |    2224 B |        3.35 |
+| 'OutputEnvelop From Invalid Input'    | 4.048 us | 0.0152 us | 0.0127 us |  1.90 |    0.01 |          9,332 |             30 |                 3,410 |         15,154 |                      17 |       41 | 0.1373 |    2320 B |        3.49 |
+
+```pwsh
+// * Hints *
+Outliers
+  ExtensionMethodsBenchmark.'OutputEnvelop From Valid Input': LaunchCount=1, RunStrategy=Throughput      -> 1 outlier  was  detected (2.12 us)
+  ExtensionMethodsBenchmark.'ValidationResult From Invalid Input': LaunchCount=1, RunStrategy=Throughput -> 1 outlier  was  removed (4.01 us)
+  ExtensionMethodsBenchmark.'OutputEnvelop From Invalid Input': LaunchCount=1, RunStrategy=Throughput    -> 2 outliers were removed (4.16 us, 4.19 us)
+```
 
 ## :people_holding_hands: Contribuindo
 

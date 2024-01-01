@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Engines;
 using FluentValidation;
+using FluentValidation.Results;
 using MCIO.OutputEnvelop.FluentValidation.Benchmarks.Interfaces;
 
 namespace MCIO.OutputEnvelop.FluentValidation.Benchmarks.ExtensionMethodsBenchs;
@@ -32,25 +33,37 @@ public class ExtensionMethodsBenchmark
     );
 
     // Public Methods
-    [Benchmark(Baseline = true)]
-    public OutputEnvelop ValidationResult_From_Valid_ValidationResult()
+    [Benchmark(Baseline = true, Description = "ValidationResult From Valid Input")]
+    public ValidationResult ValidationResult_From_Valid_Input()
     {
-        return Customer.RegisterNew(_validRegisterNewCustomerInput);
+        return Customer.RegisterNewWithoutOutputEnvelop(
+            _validRegisterNewCustomerInput, 
+            out Customer? customer
+        );
     }
-    [Benchmark()]
-    public OutputEnvelop OutputEnvelop_From_Valid_ValidationResult()
+    [Benchmark(Description = "OutputEnvelop From Valid Input")]
+    public OutputEnvelop OutputEnvelop_From_Valid_Input()
     {
-        return Customer.RegisterNew(_validRegisterNewCustomerInput).AsOutputEnvelop();
+        return Customer.RegisterNewWithoutOutputEnvelop(
+            _validRegisterNewCustomerInput, 
+            out Customer? customer
+        ).ToOutputEnvelop();
     }
-    [Benchmark]
-    public OutputEnvelop ValidationResult_From_Invalid_ValidationResult()
+    [Benchmark(Description = "ValidationResult From Invalid Input")]
+    public ValidationResult ValidationResult_From_Invalid_Input()
     {
-        return Customer.RegisterNew(_invalidRegisterNewCustomerInput);
+        return Customer.RegisterNewWithoutOutputEnvelop(
+            _invalidRegisterNewCustomerInput, 
+            out Customer? customer
+        );
     }
-    [Benchmark]
-    public OutputEnvelop OutputEnvelop_From_Invalid_ValidationResult()
+    [Benchmark(Description = "OutputEnvelop From Invalid Input")]
+    public OutputEnvelop OutputEnvelop_From_Invalid_Input()
     {
-        return Customer.RegisterNew(_invalidRegisterNewCustomerInput).AsOutputEnvelop();
+        return Customer.RegisterNewWithoutOutputEnvelop(
+            _invalidRegisterNewCustomerInput, 
+            out Customer? customer
+        ).ToOutputEnvelop();
     }
 
     public class Customer
@@ -72,17 +85,19 @@ public class ExtensionMethodsBenchmark
         }
 
         // Public Methods
-        public static OutputEnvelop<Customer> RegisterNew(RegisterNewCustomerInput input)
+        public static ValidationResult RegisterNewWithoutOutputEnvelop(RegisterNewCustomerInput input, out Customer? customer)
         {
             // Validation
             var validationResult = _registerNewCustomerInputValidator.Validate(input);
             if (!validationResult.IsValid)
-                return validationResult.ToOutputEnvelop();
+            {
+                customer = null;
+                return validationResult;
+            }
 
             // Process and return
-            return OutputEnvelop<Customer>.CreateSuccess(
-                new Customer(id: input.Id, name: input.Name, birthDate: input.BirthDate)
-            );
+            customer = new Customer(id: input.Id, name: input.Name, birthDate: input.BirthDate);
+            return validationResult;
         }
 
         // Inputs
