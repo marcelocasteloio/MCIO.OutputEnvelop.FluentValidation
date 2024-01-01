@@ -41,6 +41,7 @@ O pacote [FluentValidation](https://www.nuget.org/packages/FluentValidation) é 
   - [:package: Dependências](#package-dependências)
   - [:books: Utilização básica](#books-utilização-básica)
   - [:books: Exemplo completo](#books-exemplo-completo)
+  - [:rocket: Executando localmente](#rocket-executando-localmente)
   - [:people\_holding\_hands: Contribuindo](#people_holding_hands-contribuindo)
   - [:people\_holding\_hands: Autores](#people_holding_hands-autores)
 
@@ -183,6 +184,23 @@ public class Customer
     }
 }
 ```
+
+## :rocket: Executando localmente
+
+Por se tratar de um pacote nuget, não existe uma execução. Porém, existe o script [build-local-script](build-local-script.ps1) que pode ser executado via PowerShell que realizará as seguintes ações:
+
+1. Instalará a CLI do ReportGenerator localmente para visualização do relatório de cobertura no formato opencover.
+2. Instalará a CLI do Stryker localmente para execução e visualização do relatório do teste de mutação.
+3. Restore do projeto.
+4. Build do projeto em modo release.
+5. Execução dos testes de unidade.
+6. Execução do teste de mutação.
+7. Abertura do relatório de cobertura no navegador web padrão.
+8. Abertura do relatório de teste mutante no navegador web padrão.
+
+A partir do `diretóio raiz` do repositório, no `PowerShell`, execute o comando `.\build-local-script.ps1`.
+
+Caso queira limpar todos os arquivos gerados, a partir do `diretóio raiz` do repositório, no `PowerShell`, execute o comando `.\clear-local-script.ps1`.
 
 ## :people_holding_hands: Contribuindo
 
