@@ -18,7 +18,10 @@ public class ExtensionMethodsTest
 
         // Act
         var registerNewCustomerOutputEnvelop = Customer.RegisterNew(registerNewCustomerInput, out ValidationResult validationResult);
-        var outputEnvelop = validationResult.ToOutputEnvelop();
+        var outputEnvelopCollection = new OutputEnvelop[]{
+            validationResult.ToOutputEnvelop(),
+            validationResult.ToOutputEnvelop<Customer>(output: null!)
+        };
 
         // Assert
         registerNewCustomerOutputEnvelop.Output.Should().NotBeNull();
@@ -26,9 +29,12 @@ public class ExtensionMethodsTest
         registerNewCustomerOutputEnvelop.ExceptionCollection.Should().BeEmpty();
         registerNewCustomerOutputEnvelop.OutputMessageCollection.Should().BeEmpty();
 
-        outputEnvelop.Type.Should().Be(Enums.OutputEnvelopType.Success);
-        outputEnvelop.ExceptionCollection.Should().BeEmpty();
-        outputEnvelop.OutputMessageCollection.Should().BeEmpty();
+        foreach (var outputEnvelop in outputEnvelopCollection)
+        {
+            outputEnvelop.Type.Should().Be(Enums.OutputEnvelopType.Success);
+            outputEnvelop.ExceptionCollection.Should().BeEmpty();
+            outputEnvelop.OutputMessageCollection.Should().BeEmpty();
+        }
     }
 
     [Fact]
@@ -43,7 +49,10 @@ public class ExtensionMethodsTest
 
         // Act
         var registerNewCustomerOutputEnvelop = Customer.RegisterNew(registerNewCustomerInput, out ValidationResult validationResult);
-        var outputEnvelop = validationResult.ToOutputEnvelop();
+        var outputEnvelopCollection = new OutputEnvelop[]{
+            validationResult.ToOutputEnvelop(),
+            validationResult.ToOutputEnvelop<Customer>(output: null!)
+        };
 
         // Assert
         registerNewCustomerOutputEnvelop.Output.Should().BeNull();
@@ -51,9 +60,12 @@ public class ExtensionMethodsTest
         registerNewCustomerOutputEnvelop.ExceptionCollection.Should().BeEmpty();
         registerNewCustomerOutputEnvelop.OutputMessageCollection.Should().HaveCount(3);
 
-        outputEnvelop.Type.Should().Be(Enums.OutputEnvelopType.Error);
-        outputEnvelop.ExceptionCollection.Should().BeEmpty();
-        outputEnvelop.OutputMessageCollection.Should().HaveCount(3);
+        foreach (var outputEnvelop in outputEnvelopCollection)
+        {
+            outputEnvelop.Type.Should().Be(Enums.OutputEnvelopType.Error);
+            outputEnvelop.ExceptionCollection.Should().BeEmpty();
+            outputEnvelop.OutputMessageCollection.Should().HaveCount(3);
+        }
 
         var idIsRequiredOutputMessage = registerNewCustomerOutputEnvelop.OutputMessageCollection.First(q => 
             q.Code == Customer.RegisterNewCustomerInputValidator.CUSTOMER_ID_IS_REQUIRED_MESSAGE_CODE
