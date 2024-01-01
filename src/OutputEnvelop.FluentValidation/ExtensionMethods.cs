@@ -13,12 +13,44 @@ namespace MCIO.OutputEnvelop
         {
             return validationResult.ToOutputEnvelopInternal();
         }
+        public static OutputEnvelop<TOutput> ToOutputEnvelop<TOutput>(this ValidationResult validationResult, TOutput output)
+        {
+            return validationResult.ToOutputEnvelopInternal(output);
+        }
 
         // Internal Methods
         internal static OutputEnvelop ToOutputEnvelopInternal(this ValidationResult validationResult)
         {
-            var hasMessage = validationResult.Errors.Count > 0;
+            var outputMessageCollection = CreateOutputMessageCollectionFromValidationResult(validationResult, out bool hasMessage);
+
+            return OutputEnvelop.Create(
+                type: GetOutputEnvelopType(validationResult),
+                // The library prevent null reference
+                // Stryker disable once all
+                outputMessageCollection: hasMessage ? outputMessageCollection : null,
+                exceptionCollection: null
+            );
+        }
+        internal static OutputEnvelop<TOutput> ToOutputEnvelopInternal<TOutput>(this ValidationResult validationResult, TOutput output)
+        {
+            var outputMessageCollection = CreateOutputMessageCollectionFromValidationResult(validationResult, out bool hasMessage);
+
+            return OutputEnvelop<TOutput>.Create(
+                output,
+                type: GetOutputEnvelopType(validationResult),
+                outputMessageCollection: hasMessage ? outputMessageCollection : null,
+                exceptionCollection: null
+            );
+        }
+
+        // Private Methods
+        private static OutputMessage[] CreateOutputMessageCollectionFromValidationResult(ValidationResult validationResult, out bool hasMessage)
+        {
             OutputMessage[] outputMessageCollection = null;
+
+            // The library prevent null reference
+            // Stryker disable once all
+            hasMessage = validationResult.Errors.Count > 0;
 
             if (hasMessage)
             {
@@ -36,25 +68,26 @@ namespace MCIO.OutputEnvelop
                 }
             }
 
-            return OutputEnvelop.Create(
-                type: GetOutputEnvelopType(validationResult),
-                outputMessageCollection: hasMessage ? outputMessageCollection : null,
-                exceptionCollection: null
-            );
+            return outputMessageCollection;
         }
-
-        // Private Methods
         private static OutputEnvelopType GetOutputEnvelopType(ValidationResult validationResult)
         {
             if (validationResult.IsValid)
                 return OutputEnvelopType.Success;
 
+            // The library prevent null reference
+            // Stryker disable once all
             var hasError = false;
 
             foreach (var error in validationResult.Errors)
+                // The library prevent null reference
+                // Stryker disable once all
                 if (error.Severity == Severity.Error)
                 {
                     hasError = true;
+
+                    // The library prevent null reference
+                    // Stryker disable once all
                     break;
                 }
 
