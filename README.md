@@ -56,7 +56,7 @@ O pacote [FluentValidation](https://www.nuget.org/packages/FluentValidation) é 
 using MCIO.OutputEnvelop;
 
 var validationResult = someValidator.Validate(input);
-var outputEnvelop = validationResult.ToOutputEnvelopInternal();
+var outputEnvelop = validationResult.ToOutputEnvelop();
 ```
 
 - Com objeto de retorno
@@ -65,7 +65,7 @@ using MCIO.OutputEnvelop;
 
 var customer = new Customer();
 var validationResult = someValidator.Validate(input);
-var outputEnvelop = validationResult.ToOutputEnvelopInternal(customer);
+var outputEnvelop = validationResult.ToOutputEnvelop(customer);
 ```
 
 ## :books: Exemplo completo
