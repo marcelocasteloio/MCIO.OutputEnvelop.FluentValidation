@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace MCIO.OutputEnvelop.FluentValidation.UnitTests;
 
@@ -16,12 +17,18 @@ public class ExtensionMethodsTest
         );
 
         // Act
-        var registerNewCustomerOutputEnvelop = Customer.RegisterNew(registerNewCustomerInput);
+        var registerNewCustomerOutputEnvelop = Customer.RegisterNew(registerNewCustomerInput, out ValidationResult validationResult);
+        var outputEnvelop = validationResult.ToOutputEnvelop();
 
         // Assert
+        registerNewCustomerOutputEnvelop.Output.Should().NotBeNull();
         registerNewCustomerOutputEnvelop.Type.Should().Be(Enums.OutputEnvelopType.Success);
         registerNewCustomerOutputEnvelop.ExceptionCollection.Should().BeEmpty();
         registerNewCustomerOutputEnvelop.OutputMessageCollection.Should().BeEmpty();
+
+        outputEnvelop.Type.Should().Be(Enums.OutputEnvelopType.Success);
+        outputEnvelop.ExceptionCollection.Should().BeEmpty();
+        outputEnvelop.OutputMessageCollection.Should().BeEmpty();
     }
 
     [Fact]
@@ -35,12 +42,18 @@ public class ExtensionMethodsTest
         );
 
         // Act
-        var registerNewCustomerOutputEnvelop = Customer.RegisterNew(registerNewCustomerInput);
+        var registerNewCustomerOutputEnvelop = Customer.RegisterNew(registerNewCustomerInput, out ValidationResult validationResult);
+        var outputEnvelop = validationResult.ToOutputEnvelop();
 
         // Assert
+        registerNewCustomerOutputEnvelop.Output.Should().BeNull();
         registerNewCustomerOutputEnvelop.Type.Should().Be(Enums.OutputEnvelopType.Error);
         registerNewCustomerOutputEnvelop.ExceptionCollection.Should().BeEmpty();
         registerNewCustomerOutputEnvelop.OutputMessageCollection.Should().HaveCount(3);
+
+        outputEnvelop.Type.Should().Be(Enums.OutputEnvelopType.Error);
+        outputEnvelop.ExceptionCollection.Should().BeEmpty();
+        outputEnvelop.OutputMessageCollection.Should().HaveCount(3);
 
         var idIsRequiredOutputMessage = registerNewCustomerOutputEnvelop.OutputMessageCollection.First(q => 
             q.Code == Customer.RegisterNewCustomerInputValidator.CUSTOMER_ID_IS_REQUIRED_MESSAGE_CODE
@@ -81,16 +94,17 @@ public class ExtensionMethodsTest
         }
 
         // Public Methods
-        public static OutputEnvelop<Customer> RegisterNew(RegisterNewCustomerInput input)
+        // Validation result is a out variable for test reasons
+        public static OutputEnvelop<Customer> RegisterNew(RegisterNewCustomerInput input, out ValidationResult validationResult)
         {
             // Validation
-            var validationResult = _registerNewCustomerInputValidator.Validate(input);
+            validationResult = _registerNewCustomerInputValidator.Validate(input);
             if (!validationResult.IsValid)
-                return validationResult.ToOutputEnvelop();
+                return validationResult.ToOutputEnvelop<Customer>(output: null!);
 
             // Process and return
-            return OutputEnvelop<Customer>.CreateSuccess(
-                new Customer(id: input.Id, name: input.Name, birthDate: input.BirthDate)
+            return validationResult.ToOutputEnvelop(
+                output: validationResult.IsValid ? new Customer(id: input.Id, name: input.Name, birthDate: input.BirthDate) : null!
             );
         }
 
