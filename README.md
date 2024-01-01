@@ -6,7 +6,7 @@ Uma extensão do pacote [MarceloCastelo.IO.OutputEnvelop](https://www.nuget.org/
 
 | Nome | Versão | Link | Repository |
 | :- | :- | :- | :- |
-| MarceloCastelo.IO.OutputEnvelop |  ![Nuget](https://img.shields.io/nuget/v/MarceloCastelo.IO.OutputEnvelop) | [Nuget.org](https://www.nuget.org/packages/MarceloCastelo.IO.OutputEnvelop/) | [Link](https://www.nuget.org/packages/MarceloCastelo.IO.OutputEnvelop/) |
+| MarceloCastelo.IO.OutputEnvelop |  ![Nuget](https://img.shields.io/nuget/v/MarceloCastelo.IO.OutputEnvelop) | [Nuget.org](https://www.nuget.org/packages/MarceloCastelo.IO.OutputEnvelop/) | [Link](https://github.com/marcelocasteloio/MCIO.OutputEnvelop/) |
 | MarceloCastelo.IO.OutputEnvelop.FluentValidation |  ![Nuget](https://img.shields.io/nuget/v/MarceloCastelo.IO.OutputEnvelop.FluentValidation) | [Nuget.org](https://www.nuget.org/packages/MarceloCastelo.IO.OutputEnvelop.FluentValidation/) | Esse aqui :) |
 
 
