@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - benchs", "3 - benchs", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{56FC6D7D-A93E-4A62-98C8-7131A11E7C50}"
 	ProjectSection(SolutionItems) = preProject
+		build-local-script.ps1 = build-local-script.ps1
+		clear-local-script.ps1 = clear-local-script.ps1
 		images\icon.png = images\icon.png
 		README.md = README.md
 	EndProjectSection
