@@ -48,10 +48,14 @@ O pacote [FluentValidation](https://www.nuget.org/packages/FluentValidation) é 
 
 ## :package: Dependências
 
+[voltar ao topo](#book-conteúdo)
+
 - [.NET Standard 2.0](https://learn.microsoft.com/pt-br/dotnet/standard/net-standard?tabs=net-standard-2-0).
 - Pacote [FluentValidation](https://www.nuget.org/packages/FluentValidation).
 
 ## :books: Utilização básica
+
+[voltar ao topo](#book-conteúdo)
 
 - Sem objeto de retorno
 ```csharp
@@ -71,6 +75,8 @@ var outputEnvelop = validationResult.ToOutputEnvelop(customer);
 ```
 
 ## :books: Exemplo completo
+
+[voltar ao topo](#book-conteúdo)
 
 ```csharp
 public class Customer
