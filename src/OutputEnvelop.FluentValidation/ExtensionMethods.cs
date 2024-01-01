@@ -72,9 +72,6 @@ namespace MCIO.OutputEnvelop
         }
         private static OutputEnvelopType GetOutputEnvelopType(ValidationResult validationResult)
         {
-            if (validationResult.IsValid)
-                return OutputEnvelopType.Success;
-
             // The library prevent null reference
             // Stryker disable once all
             var hasError = false;
